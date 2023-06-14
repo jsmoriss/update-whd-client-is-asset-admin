@@ -46,12 +46,12 @@
 
 <blockquote class="wp-block-quote wide">
 <p>
-mount\_point = /<br/>
-computer\_name = ASSET123<br/>
-user\_name = jdoe<br/>whd\_server =<br>
-whd\_api\_user =<br>
-whd\_api\_key = \*\*\*\*\*\*\*\*<br/>
-macos\_version = x.x.x<br/><br/>
+mount_point = /<br/>
+computer_name = ASSET123<br/>
+user_name = jdoe<br/>whd_server =<br>
+whd_api_user =<br>
+whd_api_key = ********<br/>
+macos_version = x.x.x<br/><br/>
 user jdoe is already admin of ASSET123 (FVFYJ3ACJK80).
 </p>
 </blockquote>
