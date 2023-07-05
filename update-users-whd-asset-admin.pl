@@ -10,9 +10,9 @@
 #
 # Note that parameter 8 is false by default. If parameter 8 is true, if the
 # user is already part of the admin group and not a client of the asset in WHD,
-# the user is removed from the admin group. Note that keeping this parameter as
-# false avoids two extra validation queries to the WHD database (ie. if the
-# user is already admin, then do nothing).
+# the user is removed from the admin group. Keeping this parameter false avoids
+# two extra validation queries to the WHD database (ie. if the user is already
+# admin, then do nothing).
 #
 # Note that older MacOS versions did not include the JSON perl module, nor do
 # they have Xcode installed to use the module from CPAN, so we must check for

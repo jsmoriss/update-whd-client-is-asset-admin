@@ -40,7 +40,7 @@
 
 <p>WHD requires a valid tech username for their API queries - any active tech username will do. :)</p>
 
-<p>Note that parameter 8 is false by default. If parameter 8 is true, if the user is already part of the admin group and not a client of the asset in WHD, the user is removed from the admin group. Note that keeping this parameter as false avoids two extra validation queries to the WHD database (ie. if the user is already admin, then do nothing).</p>
+<p>Note that parameter 8 is false by default. If parameter 8 is true, if the user is already part of the admin group and not a client of the asset in WHD, the user is removed from the admin group. Keeping this parameter false avoids two extra validation queries to the WHD database (ie. if the user is already admin, then do nothing).</p>
 
 <h2 class="wp-block-heading">Jamf Policy Log Details</h2>
 
