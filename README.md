@@ -19,7 +19,7 @@
 <li><strong>Parameter 5:</strong> WHD API username?</li>
 <li><strong>Parameter 6:</strong> WHD API key?</li>
 <li><strong>Parameter 7:</strong> Always admin usernames (optional)?</li>
-<li><strong>Parameter 8:</strong> Fix non-admin users (default is false)?</li>
+<li><strong>Parameter 8:</strong> Fix extra admin users (default is false)?</li>
 </ul>
 
 <h2 class="wp-block-heading"><strong>Jamf Policy</strong></h2>
@@ -33,7 +33,7 @@
 <li><strong>Parameter 5:</strong> WHD API username? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: jsmith</mark></em></li>
 <li><strong>Parameter 6:</strong> WHD API key? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: yfi65OHG5hgu75IOgjhkdhte87JHGjhhjgjhgGJHG</mark></em></li>
 <li><strong>Parameter 7:</strong> Always admin usernames (optional)? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: sysadmin support</mark></em></li>
-<li><strong>Parameter 8:</strong> Fix non-admin users (default is false)? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: true</mark></em></li>
+<li><strong>Parameter 8:</strong> Fix extra admin users (default is false)? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: true</mark></em></li>
 </ul>
 </li>
 </ul>
@@ -56,7 +56,7 @@ whd_server = helpdesk.mycompany.com
 whd_api_user = jsmith
 whd_api_key = ********
 admin_users = sysadmin support
-fix_non_admin = true
+fix_extra_admin = true
 macos_version = x.x.x
 
 retrieved asset id 123 tag MYASSET serial number FVFYJ3ACJK80.

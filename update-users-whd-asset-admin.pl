@@ -24,7 +24,7 @@
 #	Parameter 5: WHD API username?
 #	Parameter 6: WHD API key?
 #	Parameter 7: Always admin usernames (optional)?
-#	Parameter 8: Fix non-admin users (default is false)?
+#	Parameter 8: Fix extra admin users (default is false)?
 #
 # Copyright 2023 JS Morisset <https://surniaulula.com/> and Sunshine Coast
 # School District 46 <https://sd46.bc.ca/>.
@@ -77,18 +77,18 @@ BEGIN {
 
 		if ( ! $mod_found ) {
 
-			my $mount_point    = $ARGV[ 0 ] || '';
-			my $computer_name  = $ARGV[ 1 ] || '';
-			my $user_name      = $ARGV[ 2 ] || '';
-			my $whd_server     = $ARGV[ 3 ] || '';	# WHD hostname?
-			my $whd_api_user   = $ARGV[ 4 ] || '';	# WHD API username?
-			my $whd_api_key    = $ARGV[ 5 ] || '';	# WHD API key?
-			my $admin_users    = $ARGV[ 6 ] || '';	# Always admin usernames (optional)?
-			my $fix_non_admin  = $ARGV[ 7 ] || '';	# Fix non-admin users (default is false)?
-			my $macos_version  = `/usr/bin/sw_vers -productVersion`;
+			my $mount_point     = $ARGV[ 0 ] || '';
+			my $computer_name   = $ARGV[ 1 ] || '';
+			my $user_name       = $ARGV[ 2 ] || '';
+			my $whd_server      = $ARGV[ 3 ] || '';	# WHD hostname?
+			my $whd_api_user    = $ARGV[ 4 ] || '';	# WHD API username?
+			my $whd_api_key     = $ARGV[ 5 ] || '';	# WHD API key?
+			my $admin_users     = $ARGV[ 6 ] || '';	# Always admin usernames (optional)?
+			my $fix_extra_admin = $ARGV[ 7 ] || '';	# Fix extra admin users (default is false)?
+			my $macos_version   = `/usr/bin/sw_vers -productVersion`;
 
 			# Use 'true' and 'false' strings (instead of 1 and 0) for better status messages.
-			$fix_non_admin = ( $fix_non_admin && 'false' ne lc( $fix_non_admin ) ) && 'true' || 'false';
+			$fix_extra_admin = ( $fix_extra_admin && 'false' ne lc( $fix_extra_admin ) ) && 'true' || 'false';
 
 			print "\n";
 			print "mount_point = $mount_point\n";
@@ -98,7 +98,7 @@ BEGIN {
 			print "whd_api_user = $whd_api_user\n";
 			print "whd_api_key = ********\n";
 			print "admin_users = $admin_users\n";
-			print "fix_non_admin = $fix_non_admin\n";
+			print "fix_extra_admin = $fix_extra_admin\n";
 			print "macos_version = $macos_version\n";
 			print "\n";
 			print "error: $mod perl module is required and missing.\n\n";
@@ -116,24 +116,24 @@ BEGIN {
 # Note that WHD API connections require a tech account name. Any tech account
 # name will do so long as the tech account name exists.
 #
-my $admin_node     = '.';
-my $admin_group    = 'admin';
-my $mount_point    = $ARGV[ 0 ] || '';
-my $computer_name  = $ARGV[ 1 ] || '';
-my $user_name      = $ARGV[ 2 ] || '';
-my $whd_server     = $ARGV[ 3 ] || '';	# WHD hostname?
-my $whd_api_user   = $ARGV[ 4 ] || '';	# WHD API username?
-my $whd_api_key    = $ARGV[ 5 ] || '';	# WHD API key?
-my $admin_users    = $ARGV[ 6 ] || '';	# Always admin usernames (optional)?
-my $fix_non_admin  = $ARGV[ 7 ] || '';	# Fix non-admin users (default is false)?
-my $whd_asset_url  = "https://$whd_server/helpdesk/WebObjects/Helpdesk.woa/ra/Assets/";
-my $whd_client_url = "https://$whd_server/helpdesk/WebObjects/Helpdesk.woa/ra/Clients/";
-my $home_dir       = "/Users/$user_name";
-my $cacert_pem     = "$home_dir/.cacert.pem";
-my $macos_version  = `/usr/bin/sw_vers -productVersion`;
+my $admin_node      = '.';
+my $admin_group     = 'admin';
+my $mount_point     = $ARGV[ 0 ] || '';
+my $computer_name   = $ARGV[ 1 ] || '';
+my $user_name       = $ARGV[ 2 ] || '';
+my $whd_server      = $ARGV[ 3 ] || '';	# WHD hostname?
+my $whd_api_user    = $ARGV[ 4 ] || '';	# WHD API username?
+my $whd_api_key     = $ARGV[ 5 ] || '';	# WHD API key?
+my $admin_users     = $ARGV[ 6 ] || '';	# Always admin usernames (optional)?
+my $fix_extra_admin = $ARGV[ 7 ] || '';	# Fix extra admin users (default is false)?
+my $whd_asset_url   = "https://$whd_server/helpdesk/WebObjects/Helpdesk.woa/ra/Assets/";
+my $whd_client_url  = "https://$whd_server/helpdesk/WebObjects/Helpdesk.woa/ra/Clients/";
+my $home_dir        = "/Users/$user_name";
+my $cacert_pem      = "$home_dir/.cacert.pem";
+my $macos_version   = `/usr/bin/sw_vers -productVersion`;
 
 # Use 'true' and 'false' strings (instead of 1 and 0) for better status messages.
-$fix_non_admin = ( $fix_non_admin && 'false' ne lc( $fix_non_admin ) ) && 'true' || 'false';
+$fix_extra_admin = ( $fix_extra_admin && 'false' ne lc( $fix_extra_admin ) ) && 'true' || 'false';
 
 print "\n";
 print "mount_point = $mount_point\n";
@@ -143,7 +143,7 @@ print "whd_server = $whd_server\n";
 print "whd_api_user = $whd_api_user\n";
 print "whd_api_key = ********\n";
 print "admin_users = $admin_users\n";
-print "fix_non_admin = $fix_non_admin\n";
+print "fix_extra_admin = $fix_extra_admin\n";
 print "macos_version = $macos_version\n";
 print "\n";
 
@@ -199,7 +199,7 @@ my $hw_serial_no = get_hardware_serial_number();
 
 if ( user_is_admin() ) {	# Maybe nothing to do.
 
-	if ( 'false' eq $fix_non_admin || user_is_always_admin() || user_can_admin_asset() ) {	# Nothing to do.
+	if ( 'false' eq $fix_extra_admin || user_is_always_admin() || user_can_admin_asset() ) {	# Nothing to do.
 
 		print "user $user_name is already admin of $computer_name ($hw_serial_no).\n";
 
