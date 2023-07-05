@@ -1,12 +1,18 @@
 #!/usr/bin/perl
 #
-# update-user-is-whd-asset-admin.pl
+# update-users-whd-asset-admin.pl
 #
 # JAMF policy script to make clients admin of their own asset. Fetches asset
 # clients from WHD based on the computer serial number. If $user_name is
 # already part of the admin group, then do nothing. If $user_name matches one
 # of the WHD asset clients (found using the hardware serial number), then
 # $user_name is added to the admin group.
+#
+# Note that parameter 8 is false by default. If parameter 8 is true, if the
+# user is already part of the admin group and not a client of the asset in WHD,
+# the user is removed from the admin group. Note that keeping this parameter as
+# false avoids two extra validation queries to the WHD database (ie. if the
+# user is already admin, then do nothing).
 #
 # Note that older MacOS versions did not include the JSON perl module, nor do
 # they have Xcode installed to use the module from CPAN, so we must check for
@@ -18,6 +24,7 @@
 #	Parameter 5: WHD API username?
 #	Parameter 6: WHD API key?
 #	Parameter 7: Always admin usernames (optional)?
+#	Parameter 8: Fix non-admin users (default is false)?
 #
 # Copyright 2023 JS Morisset <https://surniaulula.com/> and Sunshine Coast
 # School District 46 <https://sd46.bc.ca/>.
@@ -77,7 +84,11 @@ BEGIN {
 			my $whd_api_user   = $ARGV[ 4 ] || '';	# WHD API username?
 			my $whd_api_key    = $ARGV[ 5 ] || '';	# WHD API key?
 			my $admin_users    = $ARGV[ 6 ] || '';	# Always admin usernames (optional)?
+			my $fix_non_admin  = $ARGV[ 7 ] || '';	# Fix non-admin users (default is false)?
 			my $macos_version  = `/usr/bin/sw_vers -productVersion`;
+
+			# Use 'true' and 'false' strings (instead of 1 and 0) for better status messages.
+			$fix_non_admin = ( $fix_non_admin && 'false' ne lc( $fix_non_admin ) ) && 'true' || 'false';
 
 			print "\n";
 			print "mount_point = $mount_point\n";
@@ -87,6 +98,7 @@ BEGIN {
 			print "whd_api_user = $whd_api_user\n";
 			print "whd_api_key = ********\n";
 			print "admin_users = $admin_users\n";
+			print "fix_non_admin = $fix_non_admin\n";
 			print "macos_version = $macos_version\n";
 			print "\n";
 			print "error: $mod perl module is required and missing.\n\n";
@@ -113,11 +125,15 @@ my $whd_server     = $ARGV[ 3 ] || '';	# WHD hostname?
 my $whd_api_user   = $ARGV[ 4 ] || '';	# WHD API username?
 my $whd_api_key    = $ARGV[ 5 ] || '';	# WHD API key?
 my $admin_users    = $ARGV[ 6 ] || '';	# Always admin usernames (optional)?
+my $fix_non_admin  = $ARGV[ 7 ] || '';	# Fix non-admin users (default is false)?
 my $whd_asset_url  = "https://$whd_server/helpdesk/WebObjects/Helpdesk.woa/ra/Assets/";
 my $whd_client_url = "https://$whd_server/helpdesk/WebObjects/Helpdesk.woa/ra/Clients/";
 my $home_dir       = "/Users/$user_name";
 my $cacert_pem     = "$home_dir/.cacert.pem";
 my $macos_version  = `/usr/bin/sw_vers -productVersion`;
+
+# Use 'true' and 'false' strings (instead of 1 and 0) for better status messages.
+$fix_non_admin = ( $fix_non_admin && 'false' ne lc( $fix_non_admin ) ) && 'true' || 'false';
 
 print "\n";
 print "mount_point = $mount_point\n";
@@ -127,6 +143,7 @@ print "whd_server = $whd_server\n";
 print "whd_api_user = $whd_api_user\n";
 print "whd_api_key = ********\n";
 print "admin_users = $admin_users\n";
+print "fix_non_admin = $fix_non_admin\n";
 print "macos_version = $macos_version\n";
 print "\n";
 
@@ -180,9 +197,18 @@ if ( ! length( $whd_api_key ) ) {
 #
 my $hw_serial_no = get_hardware_serial_number();
 
-if ( user_is_admin() ) {
+if ( user_is_admin() ) {	# Maybe nothing to do.
 
-	print "user $user_name is already admin of $computer_name ($hw_serial_no).\n";
+	if ( 'false' eq $fix_non_admin || user_is_always_admin() || user_can_admin_asset() ) {	# Nothing to do.
+
+		print "user $user_name is already admin of $computer_name ($hw_serial_no).\n";
+
+	} else {	# Should not be admin.
+
+		print "user $user_name should not be admin of $computer_name ($hw_serial_no).\n";
+
+		remove_user_admin();
+	}
 
 } elsif ( user_is_always_admin() ) {
 	
@@ -301,6 +327,27 @@ sub add_user_admin {
 		print "error: failed to add user $user_name to the $admin_group group.\n\n";
 
 		exit 1;
+	}
+}
+
+#
+# Add the user to the local admin group.
+#
+sub remove_user_admin {
+
+	print "removing $user_name from the $admin_group group...\n";
+
+	`/usr/sbin/dseditgroup -o edit -n "$admin_node" -d "$user_name" -t user "$admin_group"`;
+
+	if ( user_is_admin( $user_name ) ) {	# Double check, just in case.
+
+		print "error: failed to remove user $user_name from the $admin_group group.\n\n";
+
+		exit 1;
+
+	} else {
+
+		print "success: user $user_name is no longer admin of $computer_name ($hw_serial_no).\n";
 	}
 }
 

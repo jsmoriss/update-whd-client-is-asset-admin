@@ -19,6 +19,7 @@
 <li><strong>Parameter 5:</strong> WHD API username?</li>
 <li><strong>Parameter 6:</strong> WHD API key?</li>
 <li><strong>Parameter 7:</strong> Always admin usernames (optional)?</li>
+<li><strong>Parameter 8:</strong> Fix non-admin users (default is false)?</li>
 </ul>
 
 <h2 class="wp-block-heading"><strong>Jamf Policy</strong></h2>
@@ -32,11 +33,14 @@
 <li><strong>Parameter 5:</strong> WHD API username? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: jsmith</mark></em></li>
 <li><strong>Parameter 6:</strong> WHD API key? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: yfi65OHG5hgu75IOgjhkdhte87JHGjhhjgjhgGJHG</mark></em></li>
 <li><strong>Parameter 7:</strong> Always admin usernames (optional)? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: sysadmin support</mark></em></li>
+<li><strong>Parameter 8:</strong> Fix non-admin users (default is false)? <em><mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color has-cyan-bluish-gray-color">example: true</mark></em></li>
 </ul>
 </li>
 </ul>
 
 <p>WHD requires a valid tech username for their API queries - any active tech username will do. :)</p>
+
+<p>Note that parameter 8 is false by default. If parameter 8 is true, if the user is already part of the admin group and not a client of the asset in WHD, the user is removed from the admin group. Note that keeping this parameter as false avoids two extra validation queries to the WHD database (ie. if the user is already admin, then do nothing).</p>
 
 <h2 class="wp-block-heading">Jamf Policy Log Details</h2>
 
@@ -44,14 +48,18 @@
 
 <p>For example:</p>
 
-<blockquote class="wp-block-quote wide">
-<p>
-mount_point = /<br/>
-computer_name = ASSET123<br/>
-user_name = jdoe<br/>whd_server =<br>
-whd_api_user =<br>
-whd_api_key = ********<br/>
-macos_version = x.x.x<br/><br/>
+<pre><code>
+mount_point = /
+computer_name = ASSET123
+user_name = jdoe
+whd_server = helpdesk.mycompany.com
+whd_api_user = jsmith
+whd_api_key = ********
+admin_users = sysadmin support
+fix_non_admin = true
+macos_version = x.x.x
+
+retrieved asset id 123 tag MYASSET serial number FVFYJ3ACJK80.
+retrieved client id 456 user name jdoe.
 user jdoe is already admin of ASSET123 (FVFYJ3ACJK80).
-</p>
-</blockquote>
+</code></pre>
