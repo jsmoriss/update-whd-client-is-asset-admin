@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# update-users-whd-asset-admin.pl
+# update-whd-client-is-asset-admin.pl
 #
 # JAMF policy script to make clients admin of their own asset. Fetches asset
 # clients from WHD based on the computer serial number. If $user_name is
@@ -415,9 +415,7 @@ sub get_whd_asset_client_ids {
 
 	if ( @clients < 1 ) {
 
-		print "error: asset id $asset_id tag $asset_no serial number $hw_serial_no has no clients.\n\n";
-
-		exit 1;
+		print "asset id $asset_id tag $asset_no serial number $hw_serial_no has no clients.\n\n";
 	}
 
 	my @client_ids;

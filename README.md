@@ -1,4 +1,4 @@
-<h1>update-users-whd-asset-admin</h1>
+<h1>update-whd-client-is-asset-admin.pl</h1>
 
 <p>If you use <a href="https://www.jamf.com/products/jamf-pro/">Jamf Pro</a> and <a href="https://www.solarwinds.com/web-help-desk">SolarWinds Web Help Desk</a> (WHD), you may be interested in using this Jamf policy script to <strong>make WHD asset clients admin of their own assets on login</strong>.</p>
 
