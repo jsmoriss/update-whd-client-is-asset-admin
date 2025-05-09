@@ -2,6 +2,23 @@
 #
 # update-whd-client-is-asset-admin.pl
 #
+# Authored by Jean-Sebastien Morisset <https://surniaulula.com/>.
+#
+# Copyright 2023-2025 Jean-Sebastien Morisset <https://surniaulula.com/> and
+# School District 46 <https://sd46.bc.ca/>.
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details.
+#
+# See <https://www.gnu.org/licenses/> for the GNU General Public License.
+#
 # JAMF policy script to make clients admin of their own asset. Fetches asset
 # clients from WHD based on the computer serial number. If $user_name is
 # already part of the admin group, then do nothing. If $user_name matches one
@@ -25,23 +42,6 @@
 #	Parameter 6: WHD API key?
 #	Parameter 7: Always admin usernames (optional)?
 #	Parameter 8: Fix extra admin users (default is false)?
-#
-# Copyright 2023 JS Morisset <https://surniaulula.com/> and Sunshine Coast
-# School District 46 <https://sd46.bc.ca/>.
-#
-# Authored by JS Morisset <https://surniaulula.com/>.
-#
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-# details.
-#
-# See <https://www.gnu.org/licenses/> for the GNU General Public License.
 #
 use strict;
 use warnings;
@@ -148,7 +148,7 @@ print "macos_version = $macos_version\n";
 print "\n";
 
 #
-# Basic requirement checks.
+# Requirement checks.
 #
 if ( ! length( $whd_api_key ) ) {
 
